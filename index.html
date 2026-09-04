@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симуляция движения - Физика</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header>
+            <h1>🚀 Виртуальная симуляция движения</h1>
+            <p>Интерактивное изучение видов движения</p>
+        </header>
+
+        <!-- Навигация -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="uniform">Равномерное</button>
+            <button class="tab-btn" data-tab="accelerated">Равноускоренное</button>
+            <button class="tab-btn" data-tab="circular">По окружности</button>
+            <button class="tab-btn" data-tab="projectile">Баллистическое</button>
+            <button class="tab-btn" data-tab="theory">Теория</button>
+        </nav>
+
+        <!-- 1. РАВНОМЕРНОЕ ДВИЖЕНИЕ -->
+        <section id="uniform" class="tab-content active">
+            <h2>📍 Равномерное прямолинейное движение (РПД)</h2>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Начальная позиция (м):</label>
+                    <input type="number" id="uniform-x0" value="0" min="0" max="100">
+                </div>
+                <div class="control-group">
+                    <label>Скорость (м/с):</label>
+                    <input type="range" id="uniform-v" value="5" min="0.1" max="20" step="0.1">
+                    <span id="uniform-v-value">5.0</span> м/с
+                </div>
+                <div class="control-group">
+                    <label>Время (с):</label>
+                    <input type="range" id="uniform-t" value="10" min="1" max="30" step="0.5">
+                    <span id="uniform-t-value">10.0</span> с
+                </div>
+                <button class="btn btn-play" onclick="startUniformSimulation()">▶ Запустить</button>
+                <button class="btn btn-reset" onclick="resetUniform()">↻ Сброс</button>
+            </div>
+
+            <div class="simulation-area">
+                <canvas id="uniform-canvas" width="600" height="200"></canvas>
+            </div>
+
+            <div class="info-panel">
+                <h3>Формулы РПД:</h3>
+                <div class="formula">s = v·t</div>
+                <div class="formula">x = x₀ + v·t</div>
+                
+                <h3>Результаты:</h3>
+                <div class="results">
+                    <p>Начальная позиция: <span id="uniform-result-x0">0</span> м</p>
+                    <p>Скорость: <span id="uniform-result-v">5.0</span> м/с</p>
+                    <p>Время: <span id="uniform-result-t">10.0</span> с</p>
+                    <p><strong>Пройденное расстояние: <span id="uniform-result-s">50.0</span> м</strong></p>
+                    <p><strong>Конечная позиция: <span id="uniform-result-x">50.0</span> м</strong></p>
+                </div>
+            </div>
+
+            <div class="graphs">
+                <div class="graph">
+                    <h4>График s(t)</h4>
+                    <canvas id="uniform-graph-s" width="250" height="200"></canvas>
+                </div>
+                <div class="graph">
+                    <h4>График v(t)</h4>
+                    <canvas id="uniform-graph-v" width="250" height="200"></canvas>
+                </div>
+                <div class="graph">
+                    <h4>График a(t)</h4>
+                    <canvas id="uniform-graph-a" width="250" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. РАВНОУСКОРЕННОЕ ДВИЖЕНИЕ -->
+        <section id="accelerated" class="tab-content">
+            <h2>⚡ Равноускоренное прямолинейное движение (РУПД)</h2>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Начальная скорость (м/с):</label>
+                    <input type="range" id="accel-v0" value="0" min="0" max="30" step="0.5">
+                    <span id="accel-v0-value">0.0</span> м/с
+                </div>
+                <div class="control-group">
+                    <label>Ускорение (м/с²):</label>
+                    <input type="range" id="accel-a" value="2" min="-10" max="10" step="0.5">
+                    <span id="accel-a-value">2.0</span> м/с²
+                </div>
+                <div class="control-group">
+                    <label>Время (с):</label>
+                    <input type="range" id="accel-t" value="10" min="1" max="30" step="0.5">
+                    <span id="accel-t-value">10.0</span> с
+                </div>
+                <button class="btn btn-play" onclick="startAcceleratedSimulation()">▶ Запустить</button>
+                <button class="btn btn-reset" onclick="resetAccelerated()">↻ Сброс</button>
+            </div>
+
+            <div class="simulation-area">
+                <canvas id="accel-canvas" width="600" height="200"></canvas>
+            </div>
+
+            <div class="info-panel">
+                <h3>Формулы РУПД:</h3>
+                <div class="formula">s = v₀·t + (a·t²)/2</div>
+                <div class="formula">v = v₀ + a·t</div>
+                <div class="formula">v² = v₀² + 2·a·s</div>
+                
+                <h3>Результаты:</h3>
+                <div class="results">
+                    <p>Начальная скорость: <span id="accel-result-v0">0.0</span> м/с</p>
+                    <p>Ускорение: <span id="accel-result-a">2.0</span> м/с²</p>
+                    <p>Время: <span id="accel-result-t">10.0</span> с</p>
+                    <p><strong>Конечная скорость: <span id="accel-result-v">20.0</span> м/с</strong></p>
+                    <p><strong>Пройденное расстояние: <span id="accel-result-s">100.0</span> м</strong></p>
+                </div>
+            </div>
+
+            <div class="graphs">
+                <div class="graph">
+                    <h4>График s(t)</h4>
+                    <canvas id="accel-graph-s" width="250" height="200"></canvas>
+                </div>
+                <div class="graph">
+                    <h4>График v(t)</h4>
+                    <canvas id="accel-graph-v" width="250" height="200"></canvas>
+                </div>
+                <div class="graph">
+                    <h4>График a(t)</h4>
+                    <canvas id="accel-graph-a" width="250" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ДВИЖЕНИЕ ПО ОКРУЖНОСТИ -->
+        <section id="circular" class="tab-content">
+            <h2>🔄 Равномерное движение по окружности</h2>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Радиус (м):</label>
+                    <input type="range" id="circle-r" value="50" min="20" max="100" step="5">
+                    <span id="circle-r-value">50</span> м
+                </div>
+                <div class="control-group">
+                    <label>Линейная скорость (м/с):</label>
+                    <input type="range" id="circle-v" value="10" min="1" max="30" step="1">
+                    <span id="circle-v-value">10</span> м/с
+                </div>
+                <button class="btn btn-play" onclick="startCircularSimulation()">▶ Запустить</button>
+                <button class="btn btn-reset" onclick="resetCircular()">↻ Сброс</button>
+            </div>
+
+            <div class="simulation-area">
+                <canvas id="circle-canvas" width="600" height="400"></canvas>
+            </div>
+
+            <div class="info-panel">
+                <h3>Формулы движения по окружности:</h3>
+                <div class="formula">a_c = v²/r (центростремительное ускорение)</div>
+                <div class="formula">ω = v/r (угловая скорость)</div>
+                <div class="formula">T = 2πr/v (период)</div>
+                <div class="formula">ν = 1/T (частота)</div>
+                
+                <h3>Результаты:</h3>
+                <div class="results">
+                    <p>Радиус: <span id="circle-result-r">50</span> м</p>
+                    <p>Линейная скорость: <span id="circle-result-v">10</span> м/с</p>
+                    <p><strong>Центростремительное ускорение: <span id="circle-result-ac">2.0</span> м/с²</strong></p>
+                    <p><strong>Угловая скорость: <span id="circle-result-w">0.2</span> рад/с</strong></p>
+                    <p><strong>Период: <span id="circle-result-T">31.4</span> с</strong></p>
+                    <p><strong>Частота: <span id="circle-result-nu">0.032</span> Гц</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. БАЛЛИСТИЧЕСКОЕ ДВИЖЕНИЕ -->
+        <section id="projectile" class="tab-content">
+            <h2>🎯 Баллистическое движение (движение под углом)</h2>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Начальная скорость (м/с):</label>
+                    <input type="range" id="proj-v0" value="20" min="5" max="50" step="1">
+                    <span id="proj-v0-value">20</span> м/с
+                </div>
+                <div class="control-group">
+                    <label>Угол (градусы):</label>
+                    <input type="range" id="proj-angle" value="45" min="0" max="90" step="5">
+                    <span id="proj-angle-value">45</span>°
+                </div>
+                <button class="btn btn-play" onclick="startProjectileSimulation()">▶ Запустить</button>
+                <button class="btn btn-reset" onclick="resetProjectile()">↻ Сброс</button>
+            </div>
+
+            <div class="simulation-area">
+                <canvas id="proj-canvas" width="600" height="300"></canvas>
+            </div>
+
+            <div class="info-panel">
+                <h3>Формулы баллистического движения:</h3>
+                <div class="formula">x = v₀·cos(α)·t</div>
+                <div class="formula">y = v₀·sin(α)·t - (g·t²)/2</div>
+                <div class="formula">h_max = (v₀²·sin²(α))/(2·g)</div>
+                <div class="formula">L = (v₀²·sin(2α))/g</div>
+                
+                <h3>Результаты:</h3>
+                <div class="results">
+                    <p>Начальная скорость: <span id="proj-result-v0">20</span> м/с</p>
+                    <p>Угол: <span id="proj-result-angle">45</span>°</p>
+                    <p><strong>Максимальная высота: <span id="proj-result-h">10.2</span> м</strong></p>
+                    <p><strong>Дальность полета: <span id="proj-result-L">40.8</span> м</strong></p>
+                    <p><strong>Время полета: <span id="proj-result-t">2.9</span> с</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ТЕОРИЯ -->
+        <section id="theory" class="tab-content">
+            <h2>📚 Теоретический материал</h2>
+            
+            <div class="theory-content">
+                <h3>Основные понятия кинематики</h3>
+                <p><strong>Кинематика</strong> - раздел механики, изучающий движение тел без учета сил, вызывающих это движение.</p>
+
+                <h3>Основные характеристики движения:</h3>
+                <ul>
+                    <li><strong>Траектория</strong> - линия, по которой движется тело</li>
+                    <li><strong>Путь (s)</strong> - длина траектории</li>
+                    <li><strong>Перемещение (Δr)</strong> - вектор, соединяющий начальное и конечное положение</li>
+                    <li><strong>Скорость (v)</strong> - изменение положения за единицу времени</li>
+                    <li><strong>Ускорение (a)</strong> - изменение скорости за единицу времени</li>
+                </ul>
+
+                <h3>Классификация движений:</h3>
+                <table>
+                    <tr>
+                        <th>Тип движения</th>
+                        <th>Характеристика</th>
+                        <th>Ускорение</th>
+                    </tr>
+                    <tr>
+                        <td>Равномерное</td>
+                        <td>Скорость постоянна</td>
+                        <td>a = 0</td>
+                    </tr>
+                    <tr>
+                        <td>Равноускоренное</td>
+                        <td>Скорость возрастает</td>
+                        <td>a > 0</td>
+                    </tr>
+                    <tr>
+                        <td>Равнозамедленное</td>
+                        <td>Скорость убывает</td>
+                        <td>a < 0</td>
+                    </tr>
+                    <tr>
+                        <td>По окружности</td>
+                        <td>Траектория - окружность</td>
+                        <td>a_c = v²/r</td>
+                    </tr>
+                </table>
+
+                <h3>Средняя и мгновенная скорость:</h3>
+                <p><strong>Средняя скорость:</strong> v_ср = s/t</p>
+                <p><strong>Мгновенная скорость:</strong> v = ds/dt</p>
+
+                <h3>Среднее и мгновенное ускорение:</h3>
+                <p><strong>Среднее ускорение:</strong> a_ср = Δv/Δt</p>
+                <p><strong>Мгновенное ускорение:</strong> a = dv/dt</p>
+
+                <h3>Графики движения:</h3>
+                <ul>
+                    <li><strong>График s(t)</strong> показывает зависимость перемещения от времени</li>
+                    <li><strong>График v(t)</strong> показывает изменение скорости во времени</li>
+                    <li><strong>График a(t)</strong> показывает постоянство или изменение ускорения</li>
+                </ul>
+
+                <h3>Свободное падение:</h3>
+                <p>Частный случай равноускоренного движения с g ≈ 9.8 м/с² (10 м/с² для упрощения)</p>
+                <ul>
+                    <li>h = (g·t²)/2</li>
+                    <li>v = g·t</li>
+                    <li>v² = 2·g·h</li>
+                </ul>
+
+                <h3>Важные примечания:</h3>
+                <ul>
+                    <li>Все векторные величины имеют направл��ние</li>
+                    <li>Путь всегда положителен, перемещение может быть отрицательным</li>
+                    <li>При равномерном движении s = v·t, при ускоренном необходимо использовать формулы с ускорением</li>
+                    <li>Угловая скорость связана с линейной: ω = v/r</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="js/physics.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/simulations.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
